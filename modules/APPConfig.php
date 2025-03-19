@@ -16,49 +16,29 @@ class APPConfig
                 'url' => './',
                 'hasChild' => false,
             ],
-            [
-                'name' => 'Bản đồ',
-                'icon' => 'fa fa-map',
-                'url' => 'map/',
-                'hasChild' => false,
-            ],
         ],
 
         'quanly' => [
 
             [
-                'name' => 'Nông hộ',
+                'name' => 'Giáo viên',
                 'icon' => 'fa fa-list',
                 'hasChild' => false,
-                'url' => 'quanly/nong-ho',
+                'url' => 'quanly/giao-vien',
             ],
             [
-                'name' => 'Cửa hàng thuốc BVTV',
-                'icon' => 'fa fa-store',
+                'name' => 'Học viên',
+                'icon' => 'fa fa-list',
                 'hasChild' => false,
-                'url' => 'quanly/cuahang-thuocbaove',
+                'url' => 'quanly/hoc-vien',
             ],
             [
-                'name' => 'Địa giới hành chính',
-                'icon' => 'fa fa-square',
+                'name' => 'Khóa học',
+                'icon' => 'fa fa-list',
                 'hasChild' => false,
-                'url' => 'quanly/diagioi-hanhchinh',
-                
+                'url' => 'quanly/khoa-hoc',
             ],
-            [
-                'name' => 'Vùng trồng cây canh tác',
-                'icon' => 'fa fa-square',
-                'hasChild' => false,
-                'url' => 'quanly/caytrong-canhtac',
-                
-            ],
-            [
-                'name' => 'Tìm cửa hàng theo loại thuốc',
-                'icon' => 'fa fa-map',
-                'hasChild' => false,
-                'url' => 'quanly/nong-ho/find-map',
-                
-            ],
+            
         ],
 
         'danhmuc' => [

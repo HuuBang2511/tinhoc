@@ -6,7 +6,7 @@ use yii\widgets\Breadcrumbs;
 use \app\assets\AppAsset;
 
 AppAsset::register($this);
-$this->title = 'Quản lý nông hộ';
+$this->title = 'Trung tâm tin học';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
