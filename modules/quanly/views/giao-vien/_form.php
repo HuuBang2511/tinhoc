@@ -36,7 +36,7 @@ use kartik\date\DatePicker;
                         'class' => 'date-ngaycap',
                         //'onchange' => 'dateNgaycapCheck()',
                         'format' => "dd/mm/yyyy",
-                        'value' => ($model->ngay_sinh != null) ? date('d/m/Y', strtotime($model->ngay_sinh)) : '',
+                        'value' => ($model->ngay_sinh != null) ? $model->ngay_sinh : '',
                     ],
                     'pluginOptions' => [
                         'autoclose' => true,

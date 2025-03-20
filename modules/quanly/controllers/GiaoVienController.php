@@ -13,6 +13,8 @@ use yii\helpers\Html;
 use app\modules\base\BaseController;
 use app\modules\danhmuc\models\DmGioitinh;
 use app\modules\danhmuc\models\DmTrinhdo;
+use app\modules\quanly\models\LichHoc;
+
 
 /**
  * GiaoVienController implements the CRUD actions for GiaoVien model.
@@ -21,6 +23,29 @@ class GiaoVienController extends BaseController
 {
 
     public $title = "GiaoVien";
+
+    public $const;
+
+    public function init(){
+        parent::init();
+            $this->const = [
+            'title' => 'Giáo viên',
+            'label' => [
+                'index' => 'Danh sách',
+                'create' => 'Thêm mới',
+                'update' => 'Cập nhật',
+                'view' => 'Thông tin chi tiết',
+                'statistic' => 'Thống kê',
+            ],
+            'url' => [
+                'index' => 'index',
+                'create' => 'Thêm mới',
+                'update' => 'Cập nhật',
+                'view' => 'Thông tin chi tiết',
+                'statistic' => 'Thống kê',
+            ],
+        ];
+    }
 
     /**
      * Lists all GiaoVien models.
@@ -46,21 +71,27 @@ class GiaoVienController extends BaseController
     public function actionView($id)
     {
         $request = Yii::$app->request;
-        if($request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                    'title'=> "GiaoVien #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                            Html::a('Cập nhật',['update','id'=>$id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
-                ];
-        }else{
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
-        }
+        
+        $model = $this->findModel($id);
+
+        // $hocvienLophoc = HocvienLophoc::find()->where(['hocvien_id' => $id, 'status' => 1])->all();
+
+        // $lophoc_id = [];
+        // if($hocvienLophoc != null){
+        //     foreach($hocvienLophoc as $i => $item){
+        //         $lophoc_id[] = $item->lophoc_id;
+        //     }
+        // }
+
+        $lichhoc = LichHoc::find()->where(['status' => 1, 'giaovien_id' => $id])->orderBy('thutrongtuan')->all();
+
+        // $diemdanh = DiemDanh::find()->where(['status' => 1, 'hocvien_id' => $id])->all();
+        
+        return $this->render('view',[
+            'model' => $model,
+            'lichhoc' => $lichhoc,
+            // 'diemdanh' => $diemdanh,
+        ]);
     }
 
     /**

@@ -18,6 +18,12 @@ mở cmd hoặc terminal trong vs code tại thư mục để code
 - `pnpm install`
 - `pnpm dev`
 
+nếu chạy pnmp install bị lỗi thì chạy 
+
+- `cd theme`
+- `npm install`
+- `npm run dev`
+
 VITE v4.0.4  ready in 764 ms
 
 ➜  Local:   http://localhost:5173/

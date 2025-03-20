@@ -12,7 +12,14 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use app\modules\base\BaseController;
 use app\modules\danhmuc\models\DmTinhtranglophoc;
+use app\modules\danhmuc\models\DmTinhtranghocphi;
+use app\modules\danhmuc\models\DmTinhtranghoanthanh;
 use app\modules\quanly\models\KhoaHoc;
+use app\modules\quanly\models\HocvienLophoc;
+use app\modules\quanly\models\VHocvien;
+use app\modules\quanly\models\LichHoc;
+use app\modules\quanly\models\DiemDanh;
+use app\modules\quanly\models\KetQua;
 
 /**
  * LopHocController implements the CRUD actions for LopHoc model.
@@ -21,6 +28,29 @@ class LopHocController extends BaseController
 {
 
     public $title = "Lớp học";
+
+    public $const;
+
+    public function init(){
+        parent::init();
+            $this->const = [
+            'title' => 'Lớp học',
+            'label' => [
+                'index' => 'Danh sách',
+                'create' => 'Thêm mới',
+                'update' => 'Cập nhật',
+                'view' => 'Thông tin chi tiết',
+                'statistic' => 'Thống kê',
+            ],
+            'url' => [
+                'index' => 'index',
+                'create' => 'Thêm mới',
+                'update' => 'Cập nhật',
+                'view' => 'Thông tin chi tiết',
+                'statistic' => 'Thống kê',
+            ],
+        ];
+    }
 
     /**
      * Lists all LopHoc models.
@@ -34,6 +64,7 @@ class LopHocController extends BaseController
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+
         ]);
     }
 
@@ -46,21 +77,361 @@ class LopHocController extends BaseController
     public function actionView($id)
     {
         $request = Yii::$app->request;
+        $model = $this->findModel($id);
+        $hocvienLophoc = HocvienLophoc::find()->where(['status' => 1, 'lophoc_id' => $id])->all();
+        $lichhoc = LichHoc::find()->where(['status' => 1 , 'lophoc_id' => $id])->all();
+        $diemdanh = DiemDanh::find()->where(['status' => 1, 'lophoc_id' => $id])->all();
+
+        return $this->render('view',[
+            'model' => $model,
+            'hocvienLophoc' => $hocvienLophoc,
+            'lichhoc' => $lichhoc,
+            'diemdanh' => $diemdanh,
+        ]);
+    }
+
+    public function actionDiemdanh($id)
+    {
+        $request = Yii::$app->request;
+        $model = new DiemDanh(['lophoc_id' => $id]);
+        $hocvien_id = HocvienLophoc::find()->select('hocvien_id')->where(['lophoc_id' => $id, 'status' => 1])->asArray()->all();
+        $hocvienArr = [];
+        if($hocvien_id != null){
+            foreach($hocvien_id as $i => $item){
+                $hocvienArr[] = $item['hocvien_id']; 
+            }
+        }
+        
+        $hocvien = VHocvien::find()->where(['in', 'id', $hocvienArr])->all();
+        //dd($hocvien);
+
         if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                    'title'=> "LopHoc #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
+            if($request->isGet){
+                return [
+                    'title'=> "Điểm danh học sinh nghỉ học thuộc lớp học",
+                    'content'=>$this->renderAjax('diemdanh', [
+                        'model' => $model,
+                        'hocvien' => $hocvien,
+                    ]),
+                    'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
+                            Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
+                ];
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    //'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Điểm danh học sinh nghỉ học thuộc lớp học",
+                    'content'=>'<span class="text-success">Điểm danh thành công</span>',
+                    'footer'=> Html::a('Đóng',['view', 'id' => $id],['class'=>'btn btn-light float-right']).
+                            Html::a('Tiếp tục điểm danh',['diemdanh', 'id' => $id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
+                ];
+            }else{
+                return [
+                    'title'=> "Create new LopHoc",
+                    'content'=>$this->renderAjax('diemdanh', [
+                        'model' => $model,
+                        'hocvien' => $hocvien,
                     ]),
                     'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                            Html::a('Cập nhật',['update','id'=>$id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
+                                Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
+
                 ];
+            }
         }else{
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $id]);
+            } else {
+                return $this->render('diemdanh', [
+                    'model' => $model,
+                    'hocvien' => $hocvien,
+                ]);
+            }
         }
+
+    }
+
+    public function actionKetqua($id, $hocvien_id)
+    {
+        $request = Yii::$app->request;
+        $model = KetQua::find()->where(['status' => 1, 'hocvien_id' => $hocvien_id, 'lophoc_id' => $id])->one();
+
+        if($model == null){
+            $model = new KetQua(['hocvien_id' => $hocvien_id, 'lophoc_id' => $id]);
+        }
+
+        //dd($hocvien);
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($request->isGet){
+                return [
+                    'title'=> "Kết quả của học sinh",
+                    'content'=>$this->renderAjax('ketqua', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
+                            Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
+                ];
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    //'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Kết quả của học sinh",
+                    'content'=>'<span class="text-success">Cập nhật kết quả thành công</span>',
+                    'footer'=> Html::a('Đóng',['view', 'id' => $id],['class'=>'btn btn-light float-right'])
+                            
+                ];
+            }else{
+                return [
+                    'title'=> "Create new LopHoc",
+                    'content'=>$this->renderAjax('ketqua', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
+                                Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
+
+                ];
+            }
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $id]);
+            } else {
+                return $this->render('ketqua', [
+                    'model' => $model,
+                ]);
+            }
+        }
+
+    }
+
+    public function actionCapnhatDiemdanh($id)
+    {
+        $request = Yii::$app->request;
+        $model = DiemDanh::findOne($id);
+        $hocvien_id = HocvienLophoc::find()->select('hocvien_id')->where(['lophoc_id' => $model->lophoc_id, 'status' => 1])->asArray()->all();
+        $hocvienArr = [];
+        if($hocvien_id != null){
+            foreach($hocvien_id as $i => $item){
+                $hocvienArr[] = $item['hocvien_id']; 
+            }
+        }
+        
+        $hocvien = VHocvien::find()->where(['in', 'id', $hocvienArr])->all();
+        //dd($hocvien);
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($request->isGet){
+                return [
+                    'title'=> "Điểm danh học sinh nghỉ học thuộc lớp học",
+                    'content'=>$this->renderAjax('capnhat-diemdanh', [
+                        'model' => $model,
+                        'hocvien' => $hocvien,
+                    ]),
+                    'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
+                            Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
+                ];
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    //'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Điểm danh học sinh nghỉ học thuộc lớp học",
+                    'content'=>'<span class="text-success">Cập nhật thành công</span>',
+                    'footer'=> Html::a('Đóng',['view', 'id' => $model->lophoc_id],['class'=>'btn btn-light float-right'])
+                            
+                ];
+            }else{
+                return [
+                    'title'=> "Create new LopHoc",
+                    'content'=>$this->renderAjax('capnhat-diemdanh', [
+                        'model' => $model,
+                        'hocvien' => $hocvien,
+                    ]),
+                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
+                                Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
+
+                ];
+            }
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->lophoc_id]);
+            } else {
+                return $this->render('capnhat-diemdanh', [
+                    'model' => $model,
+                    'hocvien' => $hocvien,
+                ]);
+            }
+        }
+
+    }
+
+    public function actionXoadiemdanh($id)
+    {
+        $request = Yii::$app->request;
+        $model = DiemDanh::findOne($id);
+
+        $model->status = 0;
+        $model->save();
+
+        return $this->redirect(['view', 'id' => $model->lophoc_id]);
+
+    }
+
+    public function actionThemhocvien($id)
+    {
+        $request = Yii::$app->request;
+        $model = new HocvienLophoc(['lophoc_id' => $id]);
+        $tinhtranghocphi = DmTinhtranghocphi::find()->where(['status' => 1])->all();
+        $tinhtranghoanthanh = DmTinhtranghoanthanh::find()->where(['status' => 1])->all();
+        $hocvien = VHocvien::find()->all();
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($request->isGet){
+                return [
+                    'title'=> "Thêm mới học viên vào lớp học",
+                    'content'=>$this->renderAjax('themhocvien', [
+                        'model' => $model,
+                        'tinhtranghocphi' => $tinhtranghocphi,
+                        'hocvien' => $hocvien,
+                        'tinhtranghoanthanh' => $tinhtranghoanthanh,
+                    ]),
+                    'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
+                            Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
+                ];
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    //'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Thêm mới học viên vào lớp học",
+                    'content'=>'<span class="text-success">Thêm mới học viên vào lớp học thành công</span>',
+                    'footer'=> Html::a('Đóng',['view', 'id' => $id],['class'=>'btn btn-light float-right']).
+                            Html::a('Tiếp tục thêm mới',['themhocvien', 'id' => $id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
+                ];
+            }else{
+                return [
+                    'title'=> "Create new LopHoc",
+                    'content'=>$this->renderAjax('themhocvien', [
+                        'model' => $model,
+                        'tinhtranghocphi' => $tinhtranghocphi,
+                        'hocvien' => $hocvien,
+                        'tinhtranghoanthanh' => $tinhtranghoanthanh,
+                    ]),
+                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
+                                Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
+
+                ];
+            }
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $id]);
+            } else {
+                return $this->render('themhocvien', [
+                    'model' => $model,
+                    'tinhtranghocphi' => $tinhtranghocphi,
+                    'hocvien' => $hocvien,
+                    'tinhtranghoanthanh' => $tinhtranghoanthanh,
+                ]);
+            }
+        }
+
+    }
+
+    public function actionCapnhathocvien($id)
+    {
+        $request = Yii::$app->request;
+        $model = HocvienLophoc::findOne($id);
+        $tinhtranghocphi = DmTinhtranghocphi::find()->where(['status' => 1])->all();
+        $tinhtranghoanthanh = DmTinhtranghoanthanh::find()->where(['status' => 1])->all();
+        $hocvien = VHocvien::find()->all();
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($request->isGet){
+                return [
+                    'title'=> "Cập nhật học viên lớp học",
+                    'content'=>$this->renderAjax('themhocvien', [
+                        'model' => $model,
+                        'tinhtranghocphi' => $tinhtranghocphi,
+                        'hocvien' => $hocvien,
+                        'tinhtranghoanthanh' => $tinhtranghoanthanh,
+                    ]),
+                    'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
+                            Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
+                ];
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    //'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Cập nhật học viên lớp học",
+                    'content'=>'<span class="text-success">Cập nhật học viên lớp học thành công</span>',
+                    'footer'=> Html::a('Đóng',['view', 'id' => $model->lophoc_id],['class'=>'btn btn-light float-right'])
+                ];
+            }else{
+                return [
+                    'title'=> "Create new LopHoc",
+                    'content'=>$this->renderAjax('themhocvien', [
+                        'model' => $model,
+                        'tinhtranghocphi' => $tinhtranghocphi,
+                        'hocvien' => $hocvien,
+                        'tinhtranghoanthanh' => $tinhtranghoanthanh,
+                    ]),
+                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
+                                Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
+
+                ];
+            }
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $id]);
+            } else {
+                return $this->render('themhocvien', [
+                    'model' => $model,
+                    'tinhtranghocphi' => $tinhtranghocphi,
+                    'hocvien' => $hocvien,
+                    'tinhtranghoanthanh' => $tinhtranghoanthanh,
+                ]);
+            }
+        }
+
+    }
+
+    public function actionXoahocvien($id)
+    {
+        $request = Yii::$app->request;
+        $model = HocvienLophoc::findOne($id);
+
+        $model->status = 0;
+        $model->save();
+
+        return $this->redirect(['view', 'id' => $model->lophoc_id]);
+
     }
 
     /**
@@ -161,17 +532,7 @@ class LopHocController extends BaseController
                                 Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
                 ];
             }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "LopHoc #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                        'tinhtranglophoc' => $tinhtranglophoc,
-                        'khoahoc' => $khoahoc,
-                    ]),
-                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                            Html::a('Lưu',['update','id'=>$id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
-                ];
+                return $this->redirect(['view', 'id' => $model->id]);
             }else{
                  return [
                     'title'=> "Cập nhật LopHoc #".$id,

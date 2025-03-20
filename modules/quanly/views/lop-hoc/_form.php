@@ -18,7 +18,8 @@ use kartik\date\DatePicker;
                                 'data' => ArrayHelper::map($tinhtranglophoc, 'id', 'ten'),
                                 'options' =>['prompt' => 'Chọn tình trạng lớp học'],
                                 'pluginOptions' => [
-                                    'allowClear' => true
+                                    'allowClear' => true,
+                                    'dropdownParent' => new yii\web\JsExpression('$("#ajaxCrudModal")'), 
         ],
     ])->label('Giới tính') ?>
 
@@ -26,7 +27,8 @@ use kartik\date\DatePicker;
                                 'data' => ArrayHelper::map($khoahoc, 'id', 'ten'),
                                 'options' =>['prompt' => 'Chọn khóa học'],
                                 'pluginOptions' => [
-                                    'allowClear' => true
+                                    'allowClear' => true,
+                                    'dropdownParent' => new yii\web\JsExpression('$("#ajaxCrudModal")'), 
         ],
     ])->label('Khóa học') ?>
 
@@ -37,7 +39,7 @@ use kartik\date\DatePicker;
                         'class' => 'date-ngaycap',
                         //'onchange' => 'dateNgaycapCheck()',
                         'format' => "dd/mm/yyyy",
-                        'value' => ($model->ngaybatdau != null) ? date('d/m/Y', strtotime($model->ngaybatdau)) : '',
+                        'value' => ($model->ngaybatdau != null) ? $model->ngaybatdau : '',
                     ],
                     'pluginOptions' => [
                         'autoclose' => true,
@@ -53,7 +55,7 @@ use kartik\date\DatePicker;
                         'class' => 'date-ngaycap',
                         //'onchange' => 'dateNgaycapCheck()',
                         'format' => "dd/mm/yyyy",
-                        'value' => ($model->ngayketthuc != null) ? date('d/m/Y', strtotime($model->ngayketthuc)) : '',
+                        'value' => ($model->ngayketthuc != null) ? $model->ngayketthuc : '',
                     ],
                     'pluginOptions' => [
                         'autoclose' => true,

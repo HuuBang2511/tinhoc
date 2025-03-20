@@ -3,60 +3,31 @@
 namespace app\modules\quanly\controllers;
 
 use Yii;
-use app\modules\quanly\models\HocVien;
-use app\modules\quanly\models\HocVienSearch;
+use app\modules\quanly\models\KyThi;
+use app\modules\quanly\models\KyThiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-use app\modules\danhmuc\models\DmGioitinh;
-use app\modules\danhmuc\models\DmTrinhdo;
 use app\modules\base\BaseController;
-use app\modules\quanly\models\HocVienLophoc;
-use app\modules\quanly\models\LichHoc;
-use app\modules\quanly\models\DiemDanh;
-use app\modules\quanly\models\HocPhi;
-use app\modules\quanly\models\KetQua;
-use app\modules\quanly\models\VKetquaTinhtrang;
+use app\modules\quanly\models\VLophocKhoahoc;
 
 /**
- * HocVienController implements the CRUD actions for HocVien model.
+ * KyThiController implements the CRUD actions for KyThi model.
  */
-class HocVienController extends BaseController
+class KyThiController extends BaseController
 {
 
-    public $title = "Học viên";
+    public $title = "KyThi";
 
-    public $const;
-
-    public function init(){
-        parent::init();
-            $this->const = [
-            'title' => 'Học viên',
-            'label' => [
-                'index' => 'Danh sách',
-                'create' => 'Thêm mới',
-                'update' => 'Cập nhật',
-                'view' => 'Thông tin chi tiết',
-                'statistic' => 'Thống kê',
-            ],
-            'url' => [
-                'index' => 'index',
-                'create' => 'Thêm mới',
-                'update' => 'Cập nhật',
-                'view' => 'Thông tin chi tiết',
-                'statistic' => 'Thống kê',
-            ],
-        ];
-    }
     /**
-     * Lists all HocVien models.
+     * Lists all KyThi models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new HocVienSearch();
+        $searchModel = new KyThiSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -67,46 +38,32 @@ class HocVienController extends BaseController
 
 
     /**
-     * Displays a single HocVien model.
+     * Displays a single KyThi model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);
-
-        $hocvienLophoc = HocvienLophoc::find()->where(['hocvien_id' => $id, 'status' => 1])->all();
-
-        $lophoc_id = [];
-        if($hocvienLophoc != null){
-            foreach($hocvienLophoc as $i => $item){
-                $lophoc_id[] = $item->lophoc_id;
-            }
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return [
+                    'title'=> "KyThi #".$id,
+                    'content'=>$this->renderAjax('view', [
+                        'model' => $this->findModel($id),
+                    ]),
+                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
+                            Html::a('Cập nhật',['update','id'=>$id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
+                ];
+        }else{
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
         }
-
-        $lichhoc = LichHoc::find()->where(['status' => 1])->andWhere(['in', 'lophoc_id', $lophoc_id])->all();
-
-        $diemdanh = DiemDanh::find()->where(['status' => 1, 'hocvien_id' => $id])->all();
-
-        $hocphi = HocPhi::find()->where(['status' => 1, 'hocvien_id' => $id])->all();
-
-        $ketqua = VKetquaTinhtrang::find()
-        ->where(['hocvien_id' => $id])->all();
-
-        //dd($ketqua);
-        
-        return $this->render('view',[
-            'model' => $model,
-            'lichhoc' => $lichhoc,
-            'diemdanh' => $diemdanh,
-            'hocphi' => $hocphi,
-            'ketqua' => $ketqua,
-        ]);
     }
 
     /**
-     * Creates a new HocVien model.
+     * Creates a new KyThi model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -114,9 +71,8 @@ class HocVienController extends BaseController
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new HocVien();
-        $gioitinh = DmGioitinh::find()->where(['status' => 1])->all();
-        $trinhdo = DmTrinhdo::find()->where(['status' => 1])->all();
+        $model = new KyThi();
+        $lophoc = VLophocKhoahoc::find()->all();
 
         if($request->isAjax){
             /*
@@ -125,11 +81,10 @@ class HocVienController extends BaseController
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Thêm mới học viên",
+                    'title'=> "Thêm mới kỳ thi",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
-                        'gioitinh' => $gioitinh,
-                        'trinhdo' => $trinhdo,
+                        'lophoc' => $lophoc,
                     ]),
                     'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
                             Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
@@ -137,18 +92,17 @@ class HocVienController extends BaseController
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Thêm mới HocVien",
-                    'content'=>'<span class="text-success">Thêm mới HocVien thành công</span>',
+                    'title'=> "Thêm mới KyThi",
+                    'content'=>'<span class="text-success">Thêm mới thông tin kỳ thi thành công</span>',
                     'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
                             Html::a('Tiếp tục thêm mới',['create'],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
                 ];
             }else{
                 return [
-                    'title'=> "Create new HocVien",
+                    'title'=> "Create new KyThi",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
-                        'gioitinh' => $gioitinh,
-                        'trinhdo' => $trinhdo,
+                        'lophoc' => $lophoc,
                     ]),
                     'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
                                 Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
@@ -164,8 +118,7 @@ class HocVienController extends BaseController
             } else {
                 return $this->render('create', [
                     'model' => $model,
-                    'gioitinh' => $gioitinh,
-                    'trinhdo' => $trinhdo,
+                    'lophoc' => $lophoc,
                 ]);
             }
         }
@@ -173,7 +126,7 @@ class HocVienController extends BaseController
     }
 
     /**
-     * Updates an existing HocVien model.
+     * Updates an existing KyThi model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -183,8 +136,7 @@ class HocVienController extends BaseController
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
-        $gioitinh = DmGioitinh::find()->where(['status' => 1])->all();
-        $trinhdo = DmTrinhdo::find()->where(['status' => 1])->all();
+        $lophoc = VLophocKhoahoc::find()->all();
 
         if($request->isAjax){
             /*
@@ -193,11 +145,10 @@ class HocVienController extends BaseController
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Cập nhật thông tin học viên #".$id,
+                    'title'=> "Cập nhật KyThi #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
-                        'gioitinh' => $gioitinh,
-                        'trinhdo' => $trinhdo,
+                        'lophoc' => $lophoc,
                     ]),
                     'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
                                 Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
@@ -205,22 +156,20 @@ class HocVienController extends BaseController
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Học viên #".$id,
+                    'title'=> "KyThi #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
-                        'gioitinh' => $gioitinh,
-                        'trinhdo' => $trinhdo,
+                        'lophoc' => $lophoc,
                     ]),
                     'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
                             Html::a('Lưu',['update','id'=>$id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
                 ];
             }else{
                  return [
-                    'title'=> "Cập nhật học viên #".$id,
+                    'title'=> "Cập nhật KyThi #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
-                        'gioitinh' => $gioitinh,
-                        'trinhdo' => $trinhdo,
+                        'lophoc' => $lophoc,
                     ]),
                     'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
                                 Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
@@ -235,15 +184,14 @@ class HocVienController extends BaseController
             } else {
                 return $this->render('update', [
                     'model' => $model,
-                    'gioitinh' => $gioitinh,
-                    'trinhdo' => $trinhdo,
+                    'lophoc' => $lophoc,
                 ]);
             }
         }
     }
 
     /**
-     * Delete an existing HocVien model.
+     * Delete an existing KyThi model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -257,7 +205,7 @@ class HocVienController extends BaseController
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
                 return [
-                'title' => "Xoá thông tin học viên #" . $id,
+                'title' => "Xoá thông tin kỳ thi #" . $id,
                 'content' => $this->renderAjax('delete', [
                 'model' => $model,
                 ]),
@@ -271,15 +219,15 @@ class HocVienController extends BaseController
 
     
     /**
-     * Finds the HocVien model based on its primary key value.
+     * Finds the KyThi model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return HocVien the loaded model
+     * @return KyThi the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = HocVien::findOne($id)) !== null) {
+        if (($model = KyThi::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

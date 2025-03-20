@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? $const['label']['create']
                         'data' => ArrayHelper::map($phonghoc, 'id', 'ten'),
                         'options' =>['prompt' => 'Chọn phòng học'],
                         'pluginOptions' => [
-                            'allowClear' => true
+                            'allowClear' => true,
                         ],
                     ])->label('Phòng học') ?>
                 </div>

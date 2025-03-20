@@ -13,47 +13,21 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'ma',
+        'attribute'=>'hocvien_id',
+        'value' => 'hocvien.ho_ten'
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'ho_ten',
+        'attribute'=>'lophoc_id',
+        'value' => 'lophoc.ma',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'cccd',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'so_dien_thoai',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'gmail',
+        'attribute'=>'sotien',
     ],
     // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'ngay_sinh',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'trinh_do',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'bang_cap',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'sogio_tuan',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'status',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'gioitinh_id',
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'status',
     // ],
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -65,7 +39,7 @@ return [
         },
         'buttons' => [
             'view' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-info"></span>',$url,['class' => 'btn btn-info btn-sm','title'=>'Xem']);
+                return Html::a('<span class="fa fa-info"></span>',$url,['class' => 'btn btn-info btn-sm','role' => 'modal-remote','title'=>'Xem']);
             },
             'update' => function ($url, $model, $key) {
                 return Html::a('<span class="fa fa-pen"></span>',$url,['class' => 'btn btn-warning btn-sm','role' => 'modal-remote','title'=>'Cập nhật']);

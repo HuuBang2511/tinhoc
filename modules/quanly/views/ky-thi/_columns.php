@@ -13,48 +13,26 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'ma',
+        'attribute'=>'lophoc_id',
+        'filter' => false,
+        'value' => 'lophoc.ma',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'ho_ten',
+        'attribute'=>'ngay_thi',
+    ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'status',
+    // ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'sochungnhan',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'cccd',
+        'attribute'=>'sophoibang',
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'so_dien_thoai',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'gmail',
-    ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'ngay_sinh',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'trinh_do',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'bang_cap',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'sogio_tuan',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'status',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'gioitinh_id',
-    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
@@ -65,7 +43,7 @@ return [
         },
         'buttons' => [
             'view' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-info"></span>',$url,['class' => 'btn btn-info btn-sm','title'=>'Xem']);
+                return Html::a('<span class="fa fa-info"></span>',$url,['class' => 'btn btn-info btn-sm','role' => 'modal-remote','title'=>'Xem']);
             },
             'update' => function ($url, $model, $key) {
                 return Html::a('<span class="fa fa-pen"></span>',$url,['class' => 'btn btn-warning btn-sm','role' => 'modal-remote','title'=>'Cập nhật']);

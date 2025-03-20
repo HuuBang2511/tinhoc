@@ -60,6 +60,17 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        //'attribute'=>'giaovien_id',
+        'label' => 'Tình trạng khóa học',
+        'value' => 'lophoc.tinhtranglophoc.ten'
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'phonghoc_id',
+        'value' => 'phonghoc.ten'
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'giobatdau',
         'value' => function($model){
             return ($model->giobatdau != null) ? $model->giobatdau.':00' : '';

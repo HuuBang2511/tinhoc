@@ -48,6 +48,7 @@ class LichHoc extends BaseModel
             [['giaovien_id'], 'exist', 'skipOnError' => true, 'targetClass' => GiaoVien::class, 'targetAttribute' => ['giaovien_id' => 'id']],
             [['lophoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => LopHoc::class, 'targetAttribute' => ['lophoc_id' => 'id']],
             [['phonghoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => PhongHoc::class, 'targetAttribute' => ['phonghoc_id' => 'id']],
+            [['thutrongtuan', 'giobatdau', 'gioketthuc'], 'required']
         ];
     }
 
