@@ -38,31 +38,27 @@ class APPConfig
                 'hasChild' => false,
                 'url' => 'quanly/khoa-hoc',
             ],
-            
-        ],
-
-        'danhmuc' => [
-
             [
-                'name' => 'Loại cây trồng',
+                'name' => 'Lịch học',
                 'icon' => 'fa fa-list',
                 'hasChild' => false,
-                'url' => 'quanly/loai-cay-trong',
+                'url' => 'quanly/lich-hoc',
             ],
             [
-                'name' => 'Thuốc bảo vệ',
+                'name' => 'Học phí',
                 'icon' => 'fa fa-list',
                 'hasChild' => false,
-                'url' => 'danhmuc/thuoc-baove',
+                'url' => 'quanly/hoc-phi',
             ],
             [
-                'name' => 'Thông tin bệnh',
+                'name' => 'Kỳ thi',
                 'icon' => 'fa fa-list',
                 'hasChild' => false,
-                'url' => 'quanly/thong-tin-benh',
-                
+                'url' => 'quanly/ky-thi',
             ],
         ],
+        'danhmuc' => [],
+        
     ];
 
     public static function getUrl($url)

@@ -280,54 +280,19 @@ class LichHocController extends BaseController
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
-        $model->status = 0;
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
+        if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
                 return [
-                    'title'=> "Xóa Lichhoc #".$id,
-                    'content'=>$this->renderAjax('delete', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                        Html::button('Xóa',['class'=>'btn btn-danger float-left','type'=>"submit"])
+                'title' => "Xoá lịch học #" . $id,
+                'content' => $this->renderAjax('delete', [
+                'model' => $model,
+                ]),
                 ];
-            }else if($request->isPost && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Lichhoc #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                        Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];
-            }else{
-                return [
-                    'title'=> "Update Lichhoc #".$id,
-                    'content'=>$this->renderAjax('delete', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                        Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];
-            }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('delete', [
-                    'model' => $model,
-                    'const' => $this->const,
-                ]);
-            }
+        } else {
+            $model->status = 0;
+            $model->save();
+            return $this->redirect(['index']);
         }
     }
 
