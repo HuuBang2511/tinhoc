@@ -19,9 +19,9 @@ $danhmuc = APPConfig::$CONFIG['danhmuc'];
     <div class="bg-primary">
         <div class="content-header bg-white-5">
             <a class="font-w600 text-white tracking-wide logo-default" href="<?= Yii::$app->homeUrl ?>">
-                <img src="<?= Yii::$app->homeUrl ?>images/logo.png" width="100%"
+                <!-- <img src="<?= Yii::$app->homeUrl ?>images/logo.png" width="100%"
                      alt="logo"
-                     class="logo-default py-2 h-100">
+                     class="logo-default py-2 h-100"> -->
             </a>
             <div>
                 <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none" data-toggle="layout"

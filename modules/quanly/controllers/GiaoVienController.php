@@ -186,16 +186,7 @@ class GiaoVienController extends BaseController
                                 Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"])
                 ];
             }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Giáo viên #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                        'gioitinh' => $gioitinh,
-                    ]),
-                    'footer'=> Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"]).
-                            Html::a('Lưu',['update','id'=>$id],['class'=>'btn btn-primary float-left','role'=>'modal-remote'])
-                ];
+                return $this->redirect(['view', 'id' => $model->id]);
             }else{
                  return [
                     'title'=> "Cập nhật giáo viên #".$id,

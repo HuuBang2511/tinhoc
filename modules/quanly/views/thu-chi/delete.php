@@ -4,12 +4,11 @@ use kartik\form\ActiveForm;
 
 ?>
 
-<div class="lichhoc-form">
+<div class="thu-chi-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <h4>Xóa thông tin lịch học</h4>
-    <?= Html::submitButton('Xóa', ['class' => 'btn btn-danger']) ?>
+    
 
     <?php ActiveForm::end(); ?>
 

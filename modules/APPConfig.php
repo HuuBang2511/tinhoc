@@ -45,6 +45,12 @@ class APPConfig
                 'url' => 'quanly/lich-hoc',
             ],
             [
+                'name' => 'Lớp học',
+                'icon' => 'fa fa-list',
+                'hasChild' => false,
+                'url' => 'quanly/lop-hoc',
+            ],
+            [
                 'name' => 'Học phí',
                 'icon' => 'fa fa-list',
                 'hasChild' => false,
@@ -55,6 +61,18 @@ class APPConfig
                 'icon' => 'fa fa-list',
                 'hasChild' => false,
                 'url' => 'quanly/ky-thi',
+            ],
+            [
+                'name' => 'Phòng học',
+                'icon' => 'fa fa-list',
+                'hasChild' => false,
+                'url' => 'quanly/phong-hoc',
+            ],
+            [
+                'name' => 'Thu chi',
+                'icon' => 'fa fa-list',
+                'hasChild' => false,
+                'url' => 'quanly/thu-chi',
             ],
         ],
         'danhmuc' => [],

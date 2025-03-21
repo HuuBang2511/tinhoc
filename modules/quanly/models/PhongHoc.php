@@ -2,7 +2,6 @@
 
 namespace app\modules\quanly\models;
 use app\modules\base\BaseModel;
-
 use Yii;
 
 /**
@@ -12,6 +11,7 @@ use Yii;
  * @property string|null $ten
  * @property string|null $ma
  * @property int|null $status
+ * @property string|null $ghichu
  *
  * @property LichHoc[] $lichHocs
  */
@@ -33,8 +33,8 @@ class PhongHoc extends BaseModel
     public function rules()
     {
         return [
-            [['ten', 'ma', 'status'], 'default', 'value' => null],
-            [['ten', 'ma'], 'string'],
+            [['ten', 'ma', 'status', 'ghichu'], 'default', 'value' => null],
+            [['ten', 'ma', 'ghichu'], 'string'],
             [['status'], 'default', 'value' => null],
             [['status'], 'integer'],
         ];
@@ -48,8 +48,9 @@ class PhongHoc extends BaseModel
         return [
             'id' => 'ID',
             'ten' => 'Tên phòng học',
-            'ma' => 'Mã phòng học',
+            'ma' => 'Mã',
             'status' => 'Status',
+            'ghichu' => 'Ghi chú',
         ];
     }
 
