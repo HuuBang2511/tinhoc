@@ -2,8 +2,8 @@
 
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
-
-
+use app\widgets\echarts\EChartAsset;
+EChartAsset::register($this);
 ?>
 
 <link rel="stylesheet" href="<?= Yii::$app->homeUrl ?>/resources/core/css/timetable.css">
@@ -12,42 +12,15 @@ use kartik\select2\Select2;
 
 
 <style>
-    .task {
-        background-color: white;
-        height: 70px;
-        width: 190px !important;
-        margin: 2px;
-        cursor: unset;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2rem;
-    }
+#chart-none {
+    font-family: Roboto !important;
+}
 
-    .task__container .task__name {
-        padding: 10px;
-        margin: 0 10px;
-        border-radius: 5px;
-        cursor: unset;
-    }
-
-    .day {
-        width: 190px !important;
-        border: solid 1px white;
-        color: #9bafd9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 2px;
-    }
-
-    .days__container{
-        justify-content:center;
-    }
-
-    .part__day{
-        justify-content:center;
-    }
+.chartStyle {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+}
 </style>
 
 <div class="">
@@ -121,13 +94,96 @@ use kartik\select2\Select2;
             <h3 class="block-title"></h3>
         </div>
         <div class="block-content">
-            <div class="row">
-                
-
-
+            <div class="row pb-5">
+                <div class="col-lg-6">
+                    <?php if(isset($statistic['khoahoc_trinhdo']) && count($statistic['khoahoc_trinhdo']) > 0): ?>
+                    <div id="pieKhoahoc" class="chartStyle"></div>
+                    <?php else: ?>
+                    <div class="text-center" id="chart-none">
+                        <b>Thống kê theo trình độ khóa học</b>
+                        <h4>Không có dữ liệu !</h4>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <div class="col-lg-6">
+                    <?php if(isset($statistic['lophoc_tinhtrang']) && count($statistic['lophoc_tinhtrang']) > 0): ?>
+                    <div id="pieLophoc" class="chartStyle"></div>
+                    <?php else: ?>
+                    <div class="text-center" id="chart-none">
+                        <b>Thống kê theo tình trạng lớp học</b>
+                        <h4>Không có dữ liệu !</h4>
+                    </div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="main.js"></script>
+<script>
+    $(document).ready(function () {
+        <?php if(isset($statistic['khoahoc_trinhdo']) && count($statistic['khoahoc_trinhdo']) > 0): ?>
+        initPieChart('pieKhoahoc', 'Thống kê theo trình độ khóa học', null, <?= json_encode($statistic['khoahoc_trinhdo'])?>,'Khóa học')
+        <?php endif; ?>
+        
+        <?php if(isset($statistic['lophoc_tinhtrang']) && count($statistic['lophoc_tinhtrang']) > 0): ?>
+        initPieChart('pieLophoc', 'Thống kê theo tình trạng lớp học', null, <?= json_encode($statistic['lophoc_tinhtrang'])?>,'Lớp học')
+        <?php endif; ?>
+    });
+
+    function initPieChart(id, title, label, data, unit) {
+        var chartDom = document.getElementById(id);
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: title,
+                left: 'center',
+                textStyle: {
+                    fontFamily: 'Roboto'
+                }
+            },
+            textStyle: {
+                fontFamily: 'Roboto',
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/> <b>{b}</b>:  {c} ({d}%)',
+                textStyle: {
+                    fontFamily: 'Roboto'
+                }
+            },
+            label: {
+            formatter: '{b}:{c}',
+            position: 'inside',
+            textStyle: {
+                fontFamily: 'Roboto',
+                fontSize: '8px'
+            }
+        },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                top: 'bottom',
+            },
+            series: [
+                {
+                    name: unit,
+                    type: 'pie',
+                    radius: '50%',
+                    data: data,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    }
+</script>

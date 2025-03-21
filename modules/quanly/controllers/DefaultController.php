@@ -29,6 +29,11 @@ class DefaultController extends BaseController
         ->where(['khoa_hoc.status' => 1])
         ->groupBy('trinhdo_id,dm_trinhdo.ten')->asArray()->all();
 
+        $statistic['lophoc_tinhtrang'] = LopHoc::find()->select('count(tinhtranglophoc_id) as value, dm_tinhtranglophoc.ten as name')
+        ->innerJoin('dm_tinhtranglophoc','dm_tinhtranglophoc.id = lop_hoc.tinhtranglophoc_id')
+        ->where(['lop_hoc.status' => 1])
+        ->groupBy('tinhtranglophoc_id,dm_tinhtranglophoc.ten')->asArray()->all();
+
         // $statistic['khoahoc_trinhdo'] = KhoaHoc::find()->select('count(trinhdo_id) as value, dm_trinhdo.ten as name')
         // ->innerJoin('dm_trinhdo','dm_trinhdo.id = khoa_hoc.trinhdo_id')
         // ->where(['khoa_hoc.status' => 1])->asArray()->all();
@@ -50,6 +55,7 @@ class DefaultController extends BaseController
 
         return $this->render('index', [
             'count' => $count,
+            'statistic' => $statistic,
             // 'dientichNhiembenh' => $dientichNhiembenh,
             // 'dientichVungtrong' => $dientichVungtrong,
             // 'tileNhiembenh' => $tileNhiembenh,
