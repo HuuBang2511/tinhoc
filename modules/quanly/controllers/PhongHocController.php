@@ -199,15 +199,22 @@ class PhongHocController extends BaseController
             ],
         ];
 
-        $lichhoc = LichHoc::find()->where(['status' => 1, 'phonghoc_id' =>$id])->orderBy('thutrongtuan')->all();
+        $lichhoc = LichHoc::find()
+        ->leftJoin('lop_hoc', 'lop_hoc.id = lich_hoc.lophoc_id')
+        ->Where(['lop_hoc.tinhtranglophoc_id' => 1])
+        ->andwhere(['lich_hoc.status' => 1, 'lich_hoc.phonghoc_id' =>$id])->orderBy('thutrongtuan')->all();
 
-        foreach($lichhoc as $i => $item){
-            $khoangthoigian = $item->gioketthuc - $item->giobatdau;
-            $thoikhoabieu[$item->thutrongtuan][$item->giobatdau] = 'Lớp: '.$item->lophoc->ma.', Khóa: '.$item->lophoc->khoahoc->ten;
-            for($i=1 ; $i < $khoangthoigian; $i++){
-                $thoikhoabieu[$item->thutrongtuan][$item->giobatdau + $i] = 'Lớp: '.$item->lophoc->ma.', Khóa: '.$item->lophoc->khoahoc->ten;
-            }
-        }   
+        
+        if($lichhoc != null){
+            foreach($lichhoc as $i => $item){
+                $khoangthoigian = $item->gioketthuc - $item->giobatdau;
+                $thoikhoabieu[$item->thutrongtuan][$item->giobatdau] = 'Lớp: '.$item->lophoc->ma.', Khóa: '.$item->lophoc->khoahoc->ten;
+                for($i=1 ; $i < $khoangthoigian; $i++){
+                    $thoikhoabieu[$item->thutrongtuan][$item->giobatdau + $i] = 'Lớp: '.$item->lophoc->ma.', Khóa: '.$item->lophoc->khoahoc->ten;
+                }
+            } 
+        }
+          
 
         //dd($thoikhoabieu);
 

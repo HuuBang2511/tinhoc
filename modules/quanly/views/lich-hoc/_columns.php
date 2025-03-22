@@ -61,7 +61,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         //'attribute'=>'giaovien_id',
-        'label' => 'Tình trạng khóa học',
+        'label' => 'Tình trạng lớp học',
         'value' => 'lophoc.tinhtranglophoc.ten'
     ],
     [
