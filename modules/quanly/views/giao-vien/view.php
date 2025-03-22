@@ -156,7 +156,6 @@ $this->params['breadcrumbs'][] = $const['label']['view'] . ' ' . $controller->co
                                     <th>STT</th>
                                     <th>Lớp học</th>
                                     <th>Khóa học</th>
-                                    <th>Giáo viên</th>
                                     <th>Phòng học</th>
                                     <th>Giờ bắt đầu</th>
                                     <th>Giờ kết thúc</th>
@@ -168,7 +167,6 @@ $this->params['breadcrumbs'][] = $const['label']['view'] . ' ' . $controller->co
                                     <td><?= $i + 1 ?></td>
                                     <td><?= $item->lophoc->ma ?></td>
                                     <td><?= $item->lophoc->khoahoc->ten ?></td>
-                                    <td><?= $item->giaovien->ho_ten ?></td>
                                     <td><?= $item->phonghoc->ten ?></td>
                                     <td><?= $item->giobatdau.':00' ?></td>
                                     <td><?= $item->gioketthuc.':00' ?></td>

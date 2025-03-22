@@ -83,7 +83,10 @@ class GiaoVienController extends BaseController
         //     }
         // }
 
-        $lichhoc = LichHoc::find()->where(['status' => 1, 'giaovien_id' => $id])->orderBy('thutrongtuan')->all();
+        $lichhoc = LichHoc::find()
+        ->leftJoin('lop_hoc', 'lop_hoc.id = lich_hoc.lophoc_id')
+        ->where(['lop_hoc.tinhtranglophoc_id' => 1])
+        ->andWhere(['lich_hoc.status' => 1, 'lich_hoc.giaovien_id' => $id])->orderBy('thutrongtuan')->all();
 
         // $diemdanh = DiemDanh::find()->where(['status' => 1, 'hocvien_id' => $id])->all();
         
