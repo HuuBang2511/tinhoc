@@ -1,10 +1,6 @@
 <?php
 
-namespace app\modules\quanly\models;
-use app\modules\base\BaseModel;
-use app\modules\quanly\models\HocVien;
-use app\modules\quanly\models\LopHoc;
-use app\modules\danhmuc\models\DmTinhtranghoanthanh;
+namespace app\models;
 
 use Yii;
 
@@ -23,7 +19,8 @@ use Yii;
  * @property LopHoc $lophoc
  * @property DmTinhtranghoanthanh $tinhtranghoanthanh
  */
-class KetQua extends BaseModel{
+class KetQua extends \yii\db\ActiveRecord
+{
 
 
     /**
@@ -57,10 +54,10 @@ class KetQua extends BaseModel{
     {
         return [
             'id' => 'ID',
-            'hocvien_id' => 'Học viên',
-            'lophoc_id' => 'Lớp học',
-            'diemgiuaky' => 'Điểm giữ kỳ',
-            'diemcuoiky' => 'Điểm cuối kỳ',
+            'hocvien_id' => 'Hocvien ID',
+            'lophoc_id' => 'Lophoc ID',
+            'diemgiuaky' => 'Diemgiuaky',
+            'diemcuoiky' => 'Diemcuoiky',
             'status' => 'Status',
             'tinhtranghoanthanh_id' => 'Tinhtranghoanthanh ID',
         ];

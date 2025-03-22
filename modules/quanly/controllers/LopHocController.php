@@ -60,10 +60,12 @@ class LopHocController extends BaseController
     {
         $searchModel = new LopHocSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $tinhtranglophoc = DmTinhtranglophoc::find()->where(['status' => 1])->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'tinhtranglophoc' => $tinhtranglophoc,
 
         ]);
     }
@@ -160,12 +162,17 @@ class LopHocController extends BaseController
     {
         $request = Yii::$app->request;
         $model = KetQua::find()->where(['status' => 1, 'hocvien_id' => $hocvien_id, 'lophoc_id' => $id])->one();
+        $hocvienlophoc = HocvienLophoc::find()->where(['status' => 1, 'hocvien_id' => $hocvien_id, 'lophoc_id' => $id])->one();;
 
         if($model == null){
-            $model = new KetQua(['hocvien_id' => $hocvien_id, 'lophoc_id' => $id]);
+            $model = new KetQua(['lophoc_id' => $id]);
+            $model->hocvien_id = $hocvien_id;
+            $model->tinhtranghoanthanh_id = $hocvienlophoc->tinhtranghoanthanh_id;
+        }else{
+            $model->tinhtranghoanthanh_id = $hocvienlophoc->tinhtranghoanthanh_id;
         }
 
-        //dd($hocvien);
+        //dd($model);
 
         if($request->isAjax){
             /*
@@ -181,7 +188,11 @@ class LopHocController extends BaseController
                     'footer'=> Html::button('Lưu',['class'=>'btn btn-primary float-left','type'=>"submit"]).
                             Html::button('Đóng',['class'=>'btn btn-light float-right','data-bs-dismiss'=>"modal"])
                 ];
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post())){
+                $model->save();
+                if(!$model->save()){
+                    echo ($model->getErrors());
+                }
                 return [
                     //'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Kết quả của học sinh",
@@ -189,7 +200,8 @@ class LopHocController extends BaseController
                     'footer'=> Html::a('Đóng',['view', 'id' => $id],['class'=>'btn btn-light float-right'])
                             
                 ];
-            }else{
+            }
+            else{
                 return [
                     'title'=> "Create new LopHoc",
                     'content'=>$this->renderAjax('ketqua', [
@@ -212,6 +224,7 @@ class LopHocController extends BaseController
                 ]);
             }
         }
+
 
     }
 

@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $const['label']['view'] . ' ' . $controller->co
                                     <td><?= ($item->tinhtranghocphi_id != null) ? $item->tinhtranghocphi->ten : '' ?></td>
                                     <td><?= ($item->tinhtranghoanthanh_id != null) ? $item->tinhtranghoanthanh->ten : '' ?></td>
                                     <td class="text-center">
-                                        <a href="<?= Yii::$app->homeUrl ?>quanly/lop-hoc/ketqua?hocvien_id=<?= $item->id ?>&id=<?= $_GET['id'] ?>"
+                                        <a href="<?= Yii::$app->homeUrl ?>quanly/lop-hoc/ketqua?hocvien_id=<?= $item->hocvien_id ?>&id=<?= $_GET['id'] ?>"
                                          role="modal-remote"><i
                                         class="btn btn-block btn-success fa fa-plus"></i></a>
                                         <a href="<?= Yii::$app->homeUrl ?>quanly/lop-hoc/capnhathocvien?id=<?= $item->id ?>"

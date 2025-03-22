@@ -85,7 +85,10 @@ class HocVienController extends BaseController
             }
         }
 
-        $lichhoc = LichHoc::find()->where(['status' => 1])->andWhere(['in', 'lophoc_id', $lophoc_id])->all();
+        $lichhoc = LichHoc::find()->where(['lich_hoc.status' => 1])
+        ->innerJoin('lop_hoc', 'lop_hoc.id = lich_hoc.lophoc_id')
+        ->andWhere(['lop_hoc.tinhtranglophoc_id' => 1])
+        ->andWhere(['in', 'lich_hoc.lophoc_id', $lophoc_id])->all();
 
         $diemdanh = DiemDanh::find()->where(['status' => 1, 'hocvien_id' => $id])->all();
 

@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\web\JsExpression;
+use kartik\grid\GridView;
 
 return [
     [
@@ -15,10 +18,25 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'ma',
     ],
+    // [
+    //     'class'=>'\kartik\grid\DataColumn',
+    //     'attribute'=>'tinhtranglophoc_id',
+    //     'value' => 'tinhtranglophoc.ten',
+    // ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'tinhtranglophoc_id',
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'tinhtranglophoc_id',
+        'format' => 'raw',
         'value' => 'tinhtranglophoc.ten',
+        'filter' => ArrayHelper::map($tinhtranglophoc, 'id', 'ten'),
+        'filterType' => GridView::FILTER_SELECT2,
+        'filterWidgetOptions' => [
+            'options' => ['prompt' => 'Chọn tình trạng'],
+            'pluginOptions' => [
+                'allowClear' => true,
+            ],
+        ],
+        //'width' => '30%',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
