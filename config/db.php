@@ -3,10 +3,10 @@
 $db = [
     'class' => 'yii\db\Connection',
     //'dsn' => 'pgsql:host=192.168.1.44;dbname=quan11_quanlydonvikinhte;port=5454',
-    'dsn' => 'pgsql:host=localhost;dbname=trungtamtinhoc;port=5432',
+    'dsn' => 'pgsql:host=localhost;dbname=trungtamtinhoc;port=5433',
     'username' => 'postgres',
     //'password' => 'postgres',
-    'password' => 'ngohuubang',
+    'password' => '123456',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

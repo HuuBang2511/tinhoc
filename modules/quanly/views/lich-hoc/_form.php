@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? $const['label']['create']
                 <div class="col-lg-3">
                     <?= $form->field($model, 'giobatdau')->widget(Select2::className(), [
                         'data' => $gio,
-                        'options' =>['prompt' => 'Giờ bắt đầu'],
+                        'options' =>['prompt' => 'Giờ bắt đầu', 'id' => 'giobatdau'],
                         'pluginOptions' => [
                             'allowClear' => true
                         ],
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? $const['label']['create']
                 <div class="col-lg-3">
                     <?= $form->field($model, 'gioketthuc')->widget(Select2::className(), [
                         'data' => $gio,
-                        'options' =>['prompt' => 'Giờ kết thúc'],
+                        'options' =>['prompt' => 'Giờ kết thúc', 'id' => 'gioketthuc'],
                         'pluginOptions' => [
                             'allowClear' => true
                         ],

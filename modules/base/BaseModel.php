@@ -77,7 +77,7 @@ class BaseModel extends ActiveRecord
 //         return parent::beforeValidate();// to keep parent validator available 
 //     }
 
-     public function beforeSave($insert)
+    public function beforeSave($insert)
      {
 //         date_default_timezone_set('Asia/Ho_Chi_Minh');
         
@@ -109,7 +109,12 @@ class BaseModel extends ActiveRecord
 //             $this->diachi = implode(', ', [$sonha, $tenduong, $phuong, $quan]);
 //             $this->diachi_khongdau = mb_strtolower(UtilityService::utf8convert(implode(' ', [$sonha, $tenduong, $phuong, $quan])));
 //         }
-        
+        if($this->hasAttribute('giobatdau') && $this->hasAttribute('gioketthuc')) {
+            if($this->gioketthuc < $this->giobatdau){
+                $this->gioketthuc =  $this->giobatdau;
+            }
+        }
+
         if ($this->isNewRecord) {
             $this->status = self::$STATUS['ACTIVE']; 
         }      

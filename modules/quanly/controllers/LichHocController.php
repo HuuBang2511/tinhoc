@@ -67,13 +67,6 @@ class LichHocController extends BaseController
         ];
 
         $gio = [
-            1 => '1:00',
-            2 => '2:00',
-            3 => '3:00',
-            4 => '4:00',
-            5 => '5:00',
-            6 => '6:00',
-            7 => '7:00',
             8 => '8:00',
             9 => '9:00',
             10 => '10:00',
@@ -90,7 +83,6 @@ class LichHocController extends BaseController
             21 => '21:00',
             22 => '22:00',
             23 => '23:00',
-            24 => '24:00',
         ];
 
         $searchModel = new LichhocSearch();
@@ -159,13 +151,6 @@ class LichHocController extends BaseController
         ];
 
         $gio = [
-            1 => '1:00',
-            2 => '2:00',
-            3 => '3:00',
-            4 => '4:00',
-            5 => '5:00',
-            6 => '6:00',
-            7 => '7:00',
             8 => '8:00',
             9 => '9:00',
             10 => '10:00',
@@ -182,7 +167,6 @@ class LichHocController extends BaseController
             21 => '21:00',
             22 => '22:00',
             23 => '23:00',
-            24 => '24:00',
         ];
 
         if($model->load($request->post())){
@@ -227,13 +211,6 @@ class LichHocController extends BaseController
         ];
 
         $gio = [
-            1 => '1:00',
-            2 => '2:00',
-            3 => '3:00',
-            4 => '4:00',
-            5 => '5:00',
-            6 => '6:00',
-            7 => '7:00',
             8 => '8:00',
             9 => '9:00',
             10 => '10:00',
@@ -250,7 +227,6 @@ class LichHocController extends BaseController
             21 => '21:00',
             22 => '22:00',
             23 => '23:00',
-            24 => '24:00',
         ];
 
         if($model->load($request->post())){
