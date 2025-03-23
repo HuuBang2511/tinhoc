@@ -42,6 +42,7 @@ class KhoaHoc extends BaseModel
             [['trinhdo_id', 'status'], 'integer'],
             [['trinhdo_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmTrinhdo::class, 'targetAttribute' => ['trinhdo_id' => 'id']],
             [['hocphi'], 'match', 'pattern' => '/^([0-9.,])+$/'],
+            [['ma', 'ten', 'trinhdo_id'], 'required'],
         ];
     }
 

@@ -47,6 +47,7 @@ class LopHoc extends BaseModel
             [['ngaybatdau', 'ngayketthuc'], 'safe'],
             [['tinhtranglophoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmTinhtranglophoc::class, 'targetAttribute' => ['tinhtranglophoc_id' => 'id']],
             [['khoahoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => KhoaHoc::class, 'targetAttribute' => ['khoahoc_id' => 'id']],
+            [['ma', 'tinhtranglophoc_id', 'khoahoc_id'], 'required'],
         ];
     }
 

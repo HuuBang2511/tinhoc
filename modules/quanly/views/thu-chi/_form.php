@@ -20,7 +20,7 @@ use yii\widgets\MaskedInput;
                                     'allowClear' => true,
                                     'dropdownParent' => new yii\web\JsExpression('$("#ajaxCrudModal")'), 
                                 ],
-    ])->label('Lớp học') ?>
+    ])->label('Tình trạng tiền') ?>
 
     <?= $form->field($model, 'sotien')->widget(MaskedInput::className(), [
         'options' => [

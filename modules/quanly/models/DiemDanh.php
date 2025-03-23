@@ -44,6 +44,7 @@ class DiemDanh extends BaseModel
             [['lydonghi'], 'string'],
             [['hocvien_id'], 'exist', 'skipOnError' => true, 'targetClass' => HocVien::class, 'targetAttribute' => ['hocvien_id' => 'id']],
             [['lophoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => LopHoc::class, 'targetAttribute' => ['lophoc_id' => 'id']],
+            [['hocvien_id', 'lophoc_id', 'date'], 'required'],
         ];
     }
 

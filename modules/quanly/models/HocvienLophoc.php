@@ -49,6 +49,7 @@ class HocvienLophoc extends BaseModel
             [['tinhtranghocphi_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmTinhtranghocphi::class, 'targetAttribute' => ['tinhtranghocphi_id' => 'id']],
             [['hocvien_id'], 'exist', 'skipOnError' => true, 'targetClass' => HocVien::class, 'targetAttribute' => ['hocvien_id' => 'id']],
             [['lophoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => LopHoc::class, 'targetAttribute' => ['lophoc_id' => 'id']],
+            [['hocvien_id', 'lophoc_id', 'tinhtranghoanthanh_id', 'tinhtranghocphi_id'], 'required'],
         ];
     }
 

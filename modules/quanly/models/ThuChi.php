@@ -38,7 +38,7 @@ class ThuChi extends BaseModel
             [['tinhtrangtien', 'status'], 'integer'],
             [['thongtin'], 'string'],
             [['ngay'], 'safe'],
-            [['tinhtrangtien', 'ngay'], 'required'],
+            [['tinhtrangtien', 'ngay', 'ngay'], 'required'],
         ];
     }
 

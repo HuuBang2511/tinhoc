@@ -37,6 +37,7 @@ class PhongHoc extends BaseModel
             [['ten', 'ma', 'ghichu'], 'string'],
             [['status'], 'default', 'value' => null],
             [['status'], 'integer'],
+            [['ma', 'ten'], 'required'],
         ];
     }
 

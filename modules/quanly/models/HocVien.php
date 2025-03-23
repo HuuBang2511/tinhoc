@@ -53,6 +53,7 @@ class HocVien extends BaseModel
             [['baoluuketqua'], 'boolean'],
             [['gioitinh_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmGioitinh::class, 'targetAttribute' => ['gioitinh_id' => 'id']],
             [['trinhdo_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmTrinhdo::class, 'targetAttribute' => ['trinhdo_id' => 'id']],
+            [['ma', 'ho_ten'], 'required'],
         ];
     }
 

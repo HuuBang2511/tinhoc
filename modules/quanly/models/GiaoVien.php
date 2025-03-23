@@ -47,6 +47,7 @@ class GiaoVien extends BaseModel
             [['sogio_tuan', 'status', 'gioitinh_id'], 'default', 'value' => null],
             [['sogio_tuan', 'status', 'gioitinh_id'], 'integer'],
             [['gioitinh_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmGioitinh::class, 'targetAttribute' => ['gioitinh_id' => 'id']],
+            [['ma', 'ho_ten'],'required'], 
         ];
     }
 

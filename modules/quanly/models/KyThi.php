@@ -41,6 +41,7 @@ class KyThi extends BaseModel
             [['ngay_thi'], 'safe'],
             [['sochungnhan', 'sophoibang'], 'string'],
             [['lophoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => LopHoc::class, 'targetAttribute' => ['lophoc_id' => 'id']],
+            [['lophoc_id', 'ngay_thi'], 'required'],
         ];
     }
 

@@ -47,6 +47,7 @@ class KetQua extends BaseModel{
             [['tinhtranghoanthanh_id'], 'exist', 'skipOnError' => true, 'targetClass' => DmTinhtranghoanthanh::class, 'targetAttribute' => ['tinhtranghoanthanh_id' => 'id']],
             [['hocvien_id'], 'exist', 'skipOnError' => true, 'targetClass' => HocVien::class, 'targetAttribute' => ['hocvien_id' => 'id']],
             [['lophoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => LopHoc::class, 'targetAttribute' => ['lophoc_id' => 'id']],
+            [['hocvien_id', 'lophoc_id', 'tinhtranghoanthanh_id'], 'required'],
         ];
     }
 
